@@ -1,24 +1,25 @@
 class Lexer
   KEYWORDS = %w(class def false if nil true while)
 
-  def tokenize(code)
+  def tokenize(code = nil)
+    return nil if code.nil?
     initialize_instance_variables(code)
     scan
     @tokens
   end
 
+  private
   def scan
     while @position < @code.size
       @chunk = @code[@position..-1]
       sweep_and_call(
-          [:recognize_identifier, :recognize_constant, :recognize_number, :recognize_string,
+          [:recognize_identifier,  :recognize_constant, :recognize_number,   :recognize_string,
            :recognize_indentation, :recognize_operator, :ignore_whitespaces, :recognize_single_char]
       )
     end
     close_all_open_blocks
   end
 
-  private
   def initialize_instance_variables(code)
     @code = code.chomp
     @position = 0
@@ -36,7 +37,7 @@ class Lexer
   def recognize_identifier
     identifier = @chunk[/\A([a-z]\w*)/, 1]
     if identifier
-      if KEYWORDS.include?(identifier)
+      if is_keyword?(identifier)
         @tokens << [identifier.upcase.to_sym, identifier]
       else
         @tokens << [:IDENTIFIER, identifier]
@@ -44,6 +45,10 @@ class Lexer
       @position += identifier.size
     end
     not identifier.nil?
+  end
+
+  def is_keyword?(identifier)
+    KEYWORDS.include?(identifier)
   end
 
   def recognize_constant
@@ -74,9 +79,9 @@ class Lexer
   end
 
   def recognize_indentation
-    indent = @chunk[/\A\:\n( +)/m, 1]
+    indent = @chunk[/\A:\n( +)/m, 1]
     if indent
-      if indent.size <= @current_indent
+      if is_bad_indent?(indent)
         raise "Bad indent level, got #{indent.size} indents, expected > #{@current_indent}"
       end
       @current_indent = indent.size
@@ -104,6 +109,10 @@ class Lexer
     not indent.nil?
   end
 
+  def is_bad_indent?(indent)
+    indent.size <= @current_indent
+  end
+
   def recognize_operator
     operator = @chunk[/\A(\|\||&&|==|!=|<=|>=)/, 1]
     if operator
@@ -114,7 +123,7 @@ class Lexer
   end
 
   def recognize_single_char
-    value = @chunk.first
+    value = @chunk[0]
     @tokens << [value, value]
     @position += 1
   end

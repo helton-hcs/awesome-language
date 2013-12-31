@@ -1,5 +1,5 @@
 require 'rspec'
-require 'spec_helper'
+require_relative '../lib/lexer'
 
 describe Lexer do
 
@@ -14,6 +14,10 @@ describe Lexer do
   end
 
   context '#tokenize' do
+    it 'should return nil if none code is passed' do
+      expect(@lexer.tokenize).to be_nil
+    end
+
     it 'should recognize an identifier' do
       expect(@lexer.tokenize('foo')).to eq([[:IDENTIFIER, 'foo']])
     end
