@@ -4,12 +4,12 @@ require_relative 'object'
 # Represents a Awesome class in the Ruby world. Classes are objects in Awesome so they
 # inherit from AwesomeObject.
 class AwesomeClass < AwesomeObject
-  attr_reader :runtime_methods
+  attr_reader :runtime_methods, :runtime_superclass
 
   # Creates a new class. Number is an instance of Class for example.
-  def initialize
+  def initialize(superclass=nil)
     @runtime_methods = {}
-  
+    @runtime_superclass = superclass
     # Check if we're bootstrapping (launching the runtime). During this process the 
     # runtime is not fully initialized and core classes do not yet exists, so we defer 
     # using those once the language is bootstrapped.
@@ -27,7 +27,13 @@ class AwesomeClass < AwesomeObject
   # Lookup a method
   def lookup(method_name)
     method = @runtime_methods[method_name]
-    raise "Method not found: #{method_name}" unless method
+    unless method
+      if @runtime_superclass
+        return @runtime_superclass.lookup(method_name)
+      else
+        raise "Method not found: #{method_name}"
+      end
+    end
     method
   end
 

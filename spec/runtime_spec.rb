@@ -1,5 +1,6 @@
 require 'rspec'
 require_relative '../lib/runtime/runtime'
+require_relative 'spec_helper'
 
 describe 'Runtime' do
   it 'should get constant' do
@@ -27,5 +28,16 @@ describe 'Runtime' do
 
   it 'should return that a object class is a class' do
     expect(Runtime['Class']).to eq(Runtime['Number'].runtime_class)
+  end
+
+  it 'should print the number value correctly' do
+    output = capture_stdout { Runtime['Object'].new.call('print', [Runtime['Number'].new_with_value(42)]) }.chomp
+    expect(output).to eq('42')
+  end
+
+  it 'should add 2 numbers' do
+    n1 = Runtime['Number'].new_with_value(42)
+    n2 = Runtime['Number'].new_with_value(33)
+    expect(n1.call('+', [n2]).ruby_value).to eq(75)
   end
 end
