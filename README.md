@@ -50,5 +50,5 @@ git: [helton-hcs]
 [Ruby]:https://www.ruby-lang.org
 [racc]:https://github.com/tenderlove/racc
 [rSpec]:https://github.com/rspec/rspec
-[Helton Carlos de Souza]:mailto:helton@.development@gmail.com
+[Helton Carlos de Souza]:mailto:helton.development@gmail.com
 [helton-hcs]:https://github.com/helton-hcs
