@@ -11,6 +11,7 @@ token TRUE FALSE NIL
 token IDENTIFIER
 token CONSTANT
 token INDENT DEDENT
+token WHILE
 
 # Precedence table
 # Based on http://en.wikipedia.org/wiki/Operators_in_C_and_C%2B%2B#Operator_precedence
@@ -65,6 +66,7 @@ rule
   | Def
   | Class
   | If
+  | While
   | '(' Expression ')'    { result = val[1] }
   ;
   
@@ -150,6 +152,10 @@ rule
   If:
     IF Expression Block           { result = IfNode.new(val[1], val[2]) }
   ;
+
+  # while block
+  While:
+    WHILE Expression Block        { result = WhileNode.new(val[1], val[2]) }
   
   # A block of indented code. You see here that all the hard work was done by the
   # lexer.
