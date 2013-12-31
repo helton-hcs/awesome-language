@@ -1,5 +1,6 @@
 require_relative '../../lib/parser/parser'
 require_relative '../../lib/runtime/runtime'
+require_relative '../../lib/runtime/method'
 
 class Interpreter
   def initialize

@@ -3,7 +3,7 @@
 #
 # usage:
 #
-# ./awesome example.awm # to eval a file
+# ./awesome ../../samples/example.awm # to eval a file
 #
 # ./awesome
 # to start the REPL

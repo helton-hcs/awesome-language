@@ -26,7 +26,6 @@ describe Interpreter do
     end
 
     it 'should eval a method' do
-      pending('fixing...be patient :)')
       code = <<-CODE
 def boo(a):
   a
@@ -37,7 +36,6 @@ boo("yah!")
     end
 
     it 'should eval a reopened class' do
-      pending('fixing...be patient :)')
       code = <<-CODE
 class Number:
   def ten:
@@ -49,7 +47,6 @@ class Number:
     end
 
     it 'should eval a class definition' do
-      pending('fixing...be patient :)')
       code = <<-CODE
 class Pony:
   def awesome:
@@ -69,7 +66,6 @@ if true:
     end
 
     it 'should eval a small code' do
-      pending('fixing...be patient :)')
       code = <<-CODE
 class Awesome:
   def does_it_work:
