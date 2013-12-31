@@ -50,9 +50,8 @@ Apache v2
 
 Developer
 ----
-e-mail: [Helton Carlos de Souza]
-
-git: [helton-hcs]
+  - E-mail: [Helton Carlos de Souza]
+  - GitHub: [helton-hcs]
 
 
 [How to Create Your Own Freaking Awesome Programming Language]:http://createyourproglang.com/
