@@ -66,6 +66,11 @@ describe Lexer do
       expect(@lexer.tokenize('123')).to eq([[:NUMBER, 123]])
     end
 
+    it 'should recognize operators' do
+      expect(@lexer.tokenize('+')).to eq([%w(+ +)])
+      expect(@lexer.tokenize('-')).to eq([%w(- -)])
+    end
+
     it 'should tokenize correctly a small code' do
       code = <<-CODE
 if 1:

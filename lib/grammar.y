@@ -105,8 +105,10 @@ rule
   ;
   
   Operator:
+  # Unary operator
+    '!' Expression                { result = CallNode.new(val[1], val[0], []) }
   # Binary operators
-    Expression '||' Expression    { result = CallNode.new(val[0], val[1], [val[2]]) }
+  | Expression '||' Expression    { result = CallNode.new(val[0], val[1], [val[2]]) }
   | Expression '&&' Expression    { result = CallNode.new(val[0], val[1], [val[2]]) }
   | Expression '==' Expression    { result = CallNode.new(val[0], val[1], [val[2]]) }
   | Expression '!=' Expression    { result = CallNode.new(val[0], val[1], [val[2]]) }
