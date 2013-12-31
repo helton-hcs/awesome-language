@@ -1,5 +1,5 @@
 class Lexer
-  KEYWORDS = %w(def class if true false nil)
+  KEYWORDS = %w(class def false if nil true while)
   
   def tokenize(code)
     # Cleanup code by remove extra line breaks
