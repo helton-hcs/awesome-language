@@ -171,8 +171,8 @@ rule
 end
 
 ---- header
-  require_relative '../../lib/lexer/lexer'
-  require_relative '../../lib/parser/nodes'
+require_relative '../../lib/lexer/lexer'
+require_relative '../../lib/parser/nodes'
 
 ---- inner
   def parse(code, show_tokens=false)

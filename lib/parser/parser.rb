@@ -6,8 +6,8 @@
 
 require 'racc/parser.rb'
 
-  require_relative '../../lib/lexer/lexer'
-  require_relative '../../lib/parser/nodes'
+require_relative '../../lib/lexer/lexer'
+require_relative '../../lib/parser/nodes'
 
 class Parser < Racc::Parser
 

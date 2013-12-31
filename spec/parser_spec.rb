@@ -66,8 +66,8 @@ def method(a, b):
 
     it 'should parse a class definition' do
       code = <<-CODE
-  class Muffin:
-    true
+class Muffin:
+  true
       CODE
       nodes = Nodes.new([ClassNode.new('Muffin', Nodes.new([TrueNode.new]))])
       expect(@parser.parse(code)).to eq(nodes)

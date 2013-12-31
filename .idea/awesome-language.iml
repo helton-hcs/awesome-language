@@ -163,6 +163,32 @@
       <ConfigurationWrapper RunnerId="RubyRunner" />
       <method />
     </configuration>
+    <configuration default="false" name="racc_generate_parser.sh" type="BashConfigurationType" factoryName="Bash" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="/bin/bash" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$/lib/parser/grammar" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <module name="awesome-language" />
+      <option name="SCRIPT_NAME" value="$MODULE_DIR$/lib/parser/grammar/racc_generate_parser.sh" />
+      <option name="PARAMETERS" value="" />
+      <RunnerSettings RunnerId="BashRunner" />
+      <ConfigurationWrapper RunnerId="BashRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="racc_generate_parser.sh (1)" type="BashConfigurationType" factoryName="Bash" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="/bin/bash" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$/lib/parser/grammar" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <module name="awesome-language" />
+      <option name="SCRIPT_NAME" value="$MODULE_DIR$/lib/parser/grammar/racc_generate_parser.sh" />
+      <option name="PARAMETERS" value="" />
+      <RunnerSettings RunnerId="BashRunner" />
+      <ConfigurationWrapper RunnerId="BashRunner" />
+      <method />
+    </configuration>
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />

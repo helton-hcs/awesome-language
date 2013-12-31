@@ -29,9 +29,7 @@ class Lexer
   end
 
   def sweep_and_call(methods)
-    methods.each { |method|
-      break if send method
-    }
+    methods.each { |method| break if send method }
   end
 
   def recognize_identifier
