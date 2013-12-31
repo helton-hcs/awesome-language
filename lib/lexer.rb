@@ -1,125 +1,137 @@
 class Lexer
   KEYWORDS = %w(class def false if nil true while)
-  
+
   def tokenize(code)
-    # Cleanup code by remove extra line breaks
-    code.chomp!
-    
-    # Current character position we're parsing
-    i = 0
-    
-    # Collection of all parsed tokens in the form [:TOKEN_TYPE, value]
-    tokens = []
-    
-    # Current indent level is the number of spaces in the last indent.
-    current_indent = 0
-    # We keep track of the indentation levels we are in so that when we dedent, we can 
-    # check if we're on the correct level.
-    indent_stack = []
-    
-    # This is how to implement a very simple scanner.
-    # Scan one character at the time until you find something to parse.
-    while i < code.size
-      chunk = code[i..-1]
-      
-      # Matching standard tokens.
-      #
-      # Matching if, print, method names, etc.
-      if identifier = chunk[/\A([a-z]\w*)/, 1]
-        # Keywords are special identifiers tagged with their own name, 'if' will result
-        # in an [:IF, "if"] token
-        if KEYWORDS.include?(identifier)
-          tokens << [identifier.upcase.to_sym, identifier]
-        # Non-keyword identifiers include method and variable names.
-        else
-          tokens << [:IDENTIFIER, identifier]
-        end
-        # skip what we just parsed
-        i += identifier.size
-      
-      # Matching class names and constants starting with a capital letter.
-      elsif constant = chunk[/\A([A-Z]\w*)/, 1]
-        tokens << [:CONSTANT, constant]
-        i += constant.size
-        
-      elsif number = chunk[/\A([0-9]+)/, 1]
-        tokens << [:NUMBER, number.to_i]
-        i += number.size
-        
-      elsif string = chunk[/\A"(.*?)"/, 1]
-        tokens << [:STRING, string]
-        i += string.size + 2
-      
-      # Here's the indentation magic!
-      #
-      # We have to take care of 3 cases:
-      # 
-      #   if true:  # 1) the block is created
-      #     line 1
-      #     line 2  # 2) new line inside a block
-      #   continue  # 3) dedent
-      #
-      # This elsif takes care of the first case. The number of spaces will determine 
-      # the indent level.
-      elsif indent = chunk[/\A\:\n( +)/m, 1] # Matches ": <newline> <spaces>"
-        # When we create a new block we expect the indent level to go up.
-        if indent.size <= current_indent
-          raise "Bad indent level, got #{indent.size} indents, " +
-                "expected > #{current_indent}"
-        end
-        # Adjust the current indentation level.
-        current_indent = indent.size
-        indent_stack.push(current_indent)
-        tokens << [:INDENT, indent.size]
-        i += indent.size + 2
-  
-      # This elsif takes care of the two last cases:
-      # Case 2: We stay in the same block if the indent level (number of spaces) is the
-      #         same as current_indent.
-      # Case 3: Close the current block, if indent level is lower than current_indent.
-      elsif indent = chunk[/\A\n( *)/m, 1] # Matches "<newline> <spaces>"
-        if indent.size == current_indent # Case 2
-          # Nothing to do, we're still in the same block
-          tokens << [:NEWLINE, "\n"]
-        elsif indent.size < current_indent # Case 3
-          while indent.size < current_indent
-            indent_stack.pop
-            current_indent = indent_stack.first || 0
-            tokens << [:DEDENT, indent.size]
+    initialize_instance_variables(code)
+    scan
+    @tokens
+  end
+
+  def scan
+    while @position < @code.size
+      @chunk = @code[@position..-1]
+      sweep_and_call(
+          [:recognize_identifier, :recognize_constant, :recognize_number, :recognize_string,
+           :recognize_indentation, :recognize_operator, :ignore_whitespaces, :recognize_single_char]
+      )
+    end
+    close_all_open_blocks
+  end
+
+  private
+  def initialize_instance_variables(code)
+    @code = code.chomp
+    @position = 0
+    @current_indent = 0
+    @tokens = []
+    @indent_stack = []
+  end
+
+  def sweep_and_call(methods)
+    methods.each { |method|
+      break if send method
+    }
+  end
+
+  def recognize_identifier
+    identifier = @chunk[/\A([a-z]\w*)/, 1]
+    if identifier
+      if KEYWORDS.include?(identifier)
+        @tokens << [identifier.upcase.to_sym, identifier]
+      else
+        @tokens << [:IDENTIFIER, identifier]
+      end
+      @position += identifier.size
+    end
+    not identifier.nil?
+  end
+
+  def recognize_constant
+    constant = @chunk[/\A([A-Z]\w*)/, 1]
+    if constant
+      @tokens << [:CONSTANT, constant]
+      @position += constant.size
+    end
+    not constant.nil?
+  end
+
+  def recognize_number
+    number = @chunk[/\A([0-9]+)/, 1]
+    if number
+      @tokens << [:NUMBER, number.to_i]
+      @position += number.size
+    end
+    not number.nil?
+  end
+
+  def recognize_string
+    string = @chunk[/\A"(.*?)"/, 1]
+    if string
+      @tokens << [:STRING, string]
+      @position += string.size + 2
+    end
+    not string.nil?
+  end
+
+  def recognize_indentation
+    indent = @chunk[/\A\:\n( +)/m, 1]
+    if indent
+      if indent.size <= @current_indent
+        raise "Bad indent level, got #{indent.size} indents, expected > #{@current_indent}"
+      end
+      @current_indent = indent.size
+      @indent_stack.push(@current_indent)
+      @tokens << [:INDENT, indent.size]
+      @position += indent.size + 2
+    else
+      indent = @chunk[/\A\n( *)/m, 1]
+      if indent
+        if indent.size == @current_indent
+          @tokens << [:NEWLINE, "\n"]
+        elsif indent.size < @current_indent
+          while indent.size < @current_indent
+            @indent_stack.pop
+            @current_indent = @indent_stack.first || 0
+            @tokens << [:DEDENT, indent.size]
           end
-          tokens << [:NEWLINE, "\n"]
-        else # indent.size > current_indent, error!
-          # Cannot increase indent level without using ":", so this is an error.
+          @tokens << [:NEWLINE, "\n"]
+        else
           raise "Missing ':'"
         end
-        i += indent.size + 1
-      
-      # Match long operators such as ||, &&, ==, !=, <= and >=.
-      # One character long operators are matched by the catch all `else` at the bottom.
-      elsif operator = chunk[/\A(\|\||&&|==|!=|<=|>=)/, 1]
-        tokens << [operator, operator]
-        i += operator.size
-      
-      # Ignore whitespace
-      elsif chunk.match(/\A /)
-        i += 1
-      
-      # Catch all single characters
-      # We treat all other single characters as a token. Eg.: ( ) , . ! + - <
-      else
-        value = chunk[0,1]
-        tokens << [value, value]
-        i += 1
-        
+        @position += indent.size + 1
       end
-      
     end
-    
-    # Close all open blocks
-    while indent = indent_stack.pop
-      tokens << [:DEDENT, indent_stack.first || 0]
-    end
-    
-    tokens
+    not indent.nil?
   end
+
+  def recognize_operator
+    operator = @chunk[/\A(\|\||&&|==|!=|<=|>=)/, 1]
+    if operator
+      @tokens << [operator, operator]
+      @position += operator.size
+    end
+    not operator.nil?
+  end
+
+  def recognize_single_char
+    value = @chunk.first
+    @tokens << [value, value]
+    @position += 1
+  end
+
+  def close_all_open_blocks
+    until @indent_stack.empty?
+      @indent_stack.pop
+      @tokens << [:DEDENT, @indent_stack.first || 0]
+    end
+  end
+
+  def ignore_whitespaces
+    whitespace = @chunk.match(/\A /)
+    if whitespace
+      @position += 1
+    end
+    not whitespace.nil?
+  end
+
 end

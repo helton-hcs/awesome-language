@@ -1,4 +1,3 @@
-gem 'rspec'
 require 'rspec'
 require 'spec_helper'
 
@@ -61,6 +60,31 @@ describe Lexer do
 
     it 'should recognize a number' do
       expect(@lexer.tokenize('123')).to eq([[:NUMBER, 123]])
+    end
+
+    it 'should tokenize correctly a small code' do
+      code = <<-CODE
+if 1:
+  print "..."
+  if false:
+    pass
+  print "done!"
+print "The End"
+      CODE
+      tokens = [
+          [:IF, 'if'], [:NUMBER, 1],
+          [:INDENT, 2],
+            [:IDENTIFIER, 'print'], [:STRING, '...'], [:NEWLINE, "\n"],
+            [:IF, 'if'], [:FALSE, 'false'],
+            [:INDENT, 4],
+              [:IDENTIFIER, 'pass'],
+            [:DEDENT, 2], [:NEWLINE, "\n"],
+            [:IDENTIFIER, 'print'],
+            [:STRING, 'done!'],
+          [:DEDENT, 0], [:NEWLINE, "\n"],
+          [:IDENTIFIER, 'print'], [:STRING, 'The End']
+      ]
+      expect(@lexer.tokenize(code)).to eq(tokens)
     end
   end
 
