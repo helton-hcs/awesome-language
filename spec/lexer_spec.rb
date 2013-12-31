@@ -2,7 +2,6 @@ require 'rspec'
 require_relative '../lib/lexer/lexer'
 
 describe Lexer do
-
   before :all do
     @lexer = Lexer.new
   end
@@ -119,5 +118,4 @@ print(awesome.awesomeness)
       expect(@lexer.tokenize(code)).to eq(tokens)
     end
   end
-
 end

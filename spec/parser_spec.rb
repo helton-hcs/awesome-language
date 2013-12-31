@@ -2,7 +2,6 @@ require 'rspec'
 require_relative '../lib/parser/parser'
 
 describe Parser do
-
   before :all do
     @parser = Parser.new
   end

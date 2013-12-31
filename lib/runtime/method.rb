@@ -1,3 +1,5 @@
+require_relative 'context'
+
 # Represents a method defined in the runtime.
 class AwesomeMethod
   def initialize(params, body)

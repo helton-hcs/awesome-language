@@ -3,7 +3,7 @@ class AwesomeObject
   attr_accessor :runtime_class, :ruby_value
 
   # Each object have a class (named runtime_class to prevent errors with Ruby's class
-  # method). Optionaly an object can hold a Ruby value (eg.: numbers and strings).
+  # method). Optionally an object can hold a Ruby value (eg.: numbers and strings).
   def initialize(runtime_class, ruby_value=self)
     @runtime_class = runtime_class
     @ruby_value = ruby_value

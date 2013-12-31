@@ -8,11 +8,11 @@ end
 
 # Literals are static values that have a Ruby representation, eg.: a string, a number, 
 # true, false, nil, etc.
-class LiteralNode < Struct.new(:value); end
+LiteralNode = Class.new(Struct.new(:value))
 
-class NumberNode < LiteralNode; end
+NumberNode = Class.new(LiteralNode)
 
-class StringNode < LiteralNode; end
+StringNode = Class.new(LiteralNode)
 
 class TrueNode < LiteralNode
   def initialize
@@ -39,25 +39,25 @@ end
 #   receiver.method
 #   receiver.method(argument1, argument2)
 #
-class CallNode < Struct.new(:receiver, :method, :arguments); end
+CallNode = Class.new(Struct.new(:receiver, :method, :arguments))
 
 # Retrieving the value of a constant.
-class GetConstantNode < Struct.new(:name); end
+GetConstantNode = Class.new(Struct.new(:name))
 
 # Setting the value of a constant.
-class SetConstantNode < Struct.new(:name, :value); end
+SetConstantNode = Class.new(Struct.new(:name, :value))
 
 # Setting the value of a local variable.
-class SetLocalNode < Struct.new(:name, :value); end
+SetLocalNode = Class.new(Struct.new(:name, :value))
 
 # Method definition.
-class DefNode < Struct.new(:name, :params, :body); end
+DefNode = Class.new(Struct.new(:name, :params, :body))
 
 # Class definition.
-class ClassNode < Struct.new(:name, :body); end
+ClassNode = Class.new(Struct.new(:name, :body))
 
 # "if" control structure. Look at this node if you want to implement other control
 # structures like while, for, loop, etc.
-class IfNode  < Struct.new(:condition, :body); end
+IfNode = Class.new(Struct.new(:condition, :body))
 
-class WhileNode < Struct.new(:condition, :body); end
+WhileNode = Class.new(Struct.new(:condition, :body))

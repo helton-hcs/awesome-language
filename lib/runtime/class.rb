@@ -1,3 +1,6 @@
+require_relative 'runtime'
+require_relative 'object'
+
 # Represents a Awesome class in the Ruby world. Classes are objects in Awesome so they
 # inherit from AwesomeObject.
 class AwesomeClass < AwesomeObject
@@ -13,7 +16,7 @@ class AwesomeClass < AwesomeObject
     # This solves the chicken-or-the-egg problem with the Class class. We can 
     # initialize Class then set Class.class = Class.
     if defined?(Runtime)
-      runtime_class = Runtime["Class"]
+      runtime_class = Runtime['Class']
     else
       runtime_class = nil
     end
@@ -24,9 +27,7 @@ class AwesomeClass < AwesomeObject
   # Lookup a method
   def lookup(method_name)
     method = @runtime_methods[method_name]
-    unless method
-      raise "Method not found: #{method_name}"
-    end
+    raise "Method not found: #{method_name}" unless method
     method
   end
 
