@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../lib/lexer'
+require_relative '../lib/lexer/lexer'
 
 describe Lexer do
 
@@ -93,6 +93,29 @@ print "The End"
           [:DEDENT, 0], [:NEWLINE, "\n"],
           [:IDENTIFIER, 'print'], [:STRING, 'The End']
       ]
+      expect(@lexer.tokenize(code)).to eq(tokens)
+    end
+
+    it 'should tokenize correctly a medium-size code' do
+      code = <<-CODE
+class Awesome:
+  def name:
+    "I'm Awesome"
+  def awesomeness:
+    100
+
+awesome = Awesome.new
+print(awesome.name)
+print(awesome.awesomeness)
+      CODE
+      tokens = [[:CLASS, 'class'], [:CONSTANT, 'Awesome'],
+                  [:INDENT, 2], [:DEF, 'def'], [:IDENTIFIER, 'name'],
+                    [:INDENT, 4], [:STRING, "I'm Awesome"], [:DEDENT, 2], [:NEWLINE, "\n"],
+                  [:DEF, 'def'], [:IDENTIFIER, 'awesomeness'],
+                    [:INDENT, 4], [:NUMBER, 100], [:DEDENT, 0], [:DEDENT, 0], [:NEWLINE, "\n"], [:NEWLINE, "\n"],
+                [:IDENTIFIER, 'awesome'], %w(= =), [:CONSTANT, 'Awesome'], %w(. .), [:IDENTIFIER, 'new'], [:NEWLINE, "\n"],
+                [:IDENTIFIER, 'print'], %w{( (}, [:IDENTIFIER, 'awesome'], %w(. .), [:IDENTIFIER, 'name'], %w{) )}, [:NEWLINE, "\n"],
+                [:IDENTIFIER, 'print'], %w{( (}, [:IDENTIFIER, 'awesome'], %w(. .), [:IDENTIFIER, 'awesomeness'], %w{) )}]
       expect(@lexer.tokenize(code)).to eq(tokens)
     end
   end

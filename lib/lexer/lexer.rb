@@ -114,7 +114,7 @@ class Lexer
   end
 
   def recognize_operator
-    operator = @chunk[/\A(\|\||&&|==|!=|<=|>=)/, 1]
+    operator = @chunk[/\A(\|\||&&|==|!=|<=|>=|>|<|\+|\-)/, 1]
     if operator
       @tokens << [operator, operator]
       @position += operator.size

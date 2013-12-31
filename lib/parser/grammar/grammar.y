@@ -47,7 +47,7 @@ rule
   | Expressions                        { result = val[0] }
   ;
   
-  # Any list of expressions, class or method body, seperated by line breaks.
+  # Any list of expressions, class or method body, separated by line breaks.
   Expressions:
     Expression                         { result = Nodes.new(val) }
   | Expressions Terminator Expression  { result = val[0] << val[2] }
@@ -171,15 +171,14 @@ rule
 end
 
 ---- header
-  require "lexer"
-  require "nodes"
+  require_relative '../../lib/lexer/lexer'
+  require_relative '../../lib/parser/nodes'
 
 ---- inner
-  # This code will be put as-is in the Parser class.
   def parse(code, show_tokens=false)
-    @tokens = Lexer.new.tokenize(code) # Tokenize the code using our lexer
+    @tokens = Lexer.new.tokenize(code)
     puts @tokens.inspect if show_tokens
-    do_parse # Kickoff the parsing process
+    do_parse
   end
   
   def next_token
