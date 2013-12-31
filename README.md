@@ -3,6 +3,24 @@ Awesome Language
 
 Awesome programming language is a language developed in the book [How to Create Your Own Freaking Awesome Programming Language] by [Marc-André Cournoyer].
 
+Awesome is:
+  - a object-oriented language
+  - a mix of Ruby syntax and Python indentation
+
+Language Rules
+----
+  - As in Python, blocks of code are delimited by their indentation.
+  - Classes are declared with the **class** keyword.
+  - Methods can be defined anywhere using the **def** keyword.
+  - Identifiers starting with a capital letter are constants which are globally
+accessible.
+  - Lower-case identifiers are local variables or method names.
+  - If a method takes no arguments, parenthesis can be skipped, much like in
+Ruby.
+  - The last value evaluated in a method is its return value.
+  - **Everything** is an **object**.
+
+
 This implementation is a refactored and improved version.
 
 Requirements
