@@ -43,9 +43,54 @@ Runtime['Object'].runtime_methods['print'] = proc do |_, arguments|
   Runtime['nil']
 end
 
+# Number operations:
 Runtime['Number'].runtime_methods['+'] = proc do |receiver, arguments|
   result = receiver.ruby_value + arguments.first.ruby_value
   Runtime['Number'].new_with_value(result)
 end
-#Dir.entries('.').reject { |file| file[0] == '.' }.sort.each { |file| load file }
-#['object.rb', 'method.rb', 'context.rb', 'class.rb', 'runtime.rb', 'class.rb'].each { |file| load file }
+
+Runtime['Number'].runtime_methods['-'] = proc do |receiver, arguments|
+  result = receiver.ruby_value - arguments.first.ruby_value
+  Runtime['Number'].new_with_value(result)
+end
+
+Runtime['Number'].runtime_methods['*'] = proc do |receiver, arguments|
+  result = receiver.ruby_value * arguments.first.ruby_value
+  Runtime['Number'].new_with_value(result)
+end
+
+Runtime['Number'].runtime_methods['/'] = proc do |receiver, arguments|
+  result = receiver.ruby_value / arguments.first.ruby_value
+  Runtime['Number'].new_with_value(result)
+end
+
+# Number comparisons:
+Runtime['Number'].runtime_methods['=='] = proc do |receiver, arguments|
+  result = receiver.ruby_value == arguments.first.ruby_value
+  Runtime[result.to_s]
+end
+
+Runtime['Number'].runtime_methods['!='] = proc do |receiver, arguments|
+  result = receiver.ruby_value != arguments.first.ruby_value
+  Runtime[result.to_s]
+end
+
+Runtime['Number'].runtime_methods['>'] = proc do |receiver, arguments|
+  result = receiver.ruby_value > arguments.first.ruby_value
+  Runtime[result.to_s]
+end
+
+Runtime['Number'].runtime_methods['<'] = proc do |receiver, arguments|
+  result = receiver.ruby_value < arguments.first.ruby_value
+  Runtime[result.to_s]
+end
+
+Runtime['Number'].runtime_methods['>='] = proc do |receiver, arguments|
+  result = receiver.ruby_value >= arguments.first.ruby_value
+  Runtime[result.to_s]
+end
+
+Runtime['Number'].runtime_methods['<='] = proc do |receiver, arguments|
+  result = receiver.ruby_value <= arguments.first.ruby_value
+  Runtime[result.to_s]
+end

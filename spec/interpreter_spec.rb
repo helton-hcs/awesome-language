@@ -57,12 +57,24 @@ Pony.new.awesome
       expect(Interpreter.new.eval(code).ruby_value).to eq(true)
     end
 
-    it 'should eval a if' do
+    it 'should eval a if statement' do
       code = <<-CODE
 if true:
   "works!"
       CODE
       expect(Interpreter.new.eval(code).ruby_value).to eq('works!')
+    end
+
+    it 'should eval a while statement (factorial of 5)' do
+      code = <<-CODE
+i = 1
+x = 1
+while i <= 5:
+  x = x * i
+  i = i + 1
+x
+      CODE
+      expect(Interpreter.new.eval(code).ruby_value).to eq(120)
     end
 
     it 'should eval a small code' do
