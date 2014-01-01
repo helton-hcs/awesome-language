@@ -4,7 +4,7 @@ Awesome Language
 Awesome programming language is a language developed in the book [How to Create Your Own Freaking Awesome Programming Language] by [Marc-André Cournoyer].
 
 Awesome is:
-  - a object-oriented language
+  - an object-oriented language
   - a mix of Ruby syntax and Python indentation
 
 Language Rules
