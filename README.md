@@ -46,7 +46,7 @@ $ gem install rspec
 
 ##### Cloning the git repository...
 ```sh
-git clone https://github.com/helton-hcs/awesome-language.git
+git clone https://github.com/helton/awesome-language.git
 cd awesome-language
 ```
 
