@@ -17,7 +17,7 @@ describe 'Runtime' do
 
   it 'should lookup a method in class' do
     expect(Runtime['Object'].lookup('print')).not_to be_nil
-    expect{Runtime['Object'].lookup('non-existant')}.to raise_error(RuntimeError)
+    expect{Runtime['Object'].lookup('non-existent')}.to raise_error(RuntimeError)
   end
 
   it 'should call a method' do
